@@ -10,20 +10,9 @@ services:
   # Назвать его можно так, как нужно разработчику.
   # Понятное название сервиса помогает определить его роль.
 
-  shop-php:
+  
+   shop-php:
     container_name: shop-php
-    # Ключевое слово "build" позволяет задать
-    # путь к файлу Dockerfile, который нужно использовать для создания образа,
-    # который позволит запустить сервис.
-
-    build:
-      context: ./docker/dev/php
-    volumes:
-      - ./:/var/www
-      - ./docker/dev/php/php.ini:/usr/local/etc/php/php.ini
-
-  shop-php-fpm:
-    container_name: shop-php-fpm
     build:
       context: ./docker/dev/php-fpm
 
@@ -32,7 +21,7 @@ services:
       - ./docker/dev/php-fpm/php.ini:/usr/local/etc/php/php.ini
 
 
-  shop-nginx:
+   shop-nginx:
     container_name: shop-nginx
     build:
       context: ./docker/dev/nginx
@@ -43,7 +32,7 @@ services:
       - ./docker/dev/nginx/conf.d/:/etc/nginx/conf.d
       - ./docker/logs:/var/log
     depends_on:
-      - shop-php-fpm
+      - shop-php
 
     # Если мы хотим обратиться к серверу с локальногонашего компьютера (находясь за пределами контейнера),
     # мы должны организовать перенаправление этого порта на порт компьютера.
@@ -55,8 +44,8 @@ services:
     ports:
       - "80:80"
       - "443:443"
-  #
-  shop-node:
+  
+   shop-node:
     container_name: shop-node
     image: node:latest
     volumes:
